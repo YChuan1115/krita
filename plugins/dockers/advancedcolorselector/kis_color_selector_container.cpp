@@ -136,12 +136,20 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
             connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
         }
 
+        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
+                m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMask*)));
+
+        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskUnset()),
+                m_colorSelector, SLOT(slotGamutMaskUnset()));
+
+        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskPreviewUpdate()),
+                m_colorSelector, SLOT(slotGamutMaskPreviewUpdate()));
+
         KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
         actionCollection->addAction("show_color_selector", m_colorSelAction);
         actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
         actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);
     }
-
 }
 
 void KisColorSelectorContainer::updateSettings()

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
-    <height>973</height>
+    <width>721</width>
+    <height>1108</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -489,6 +489,22 @@
         </layout>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Gamut Masking</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_17">
+          <item>
+           <widget class="QCheckBox" name="showMaskPreview">
+            <property name="text">
+             <string>Show preview while editing a mask</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -499,7 +515,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>228</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>

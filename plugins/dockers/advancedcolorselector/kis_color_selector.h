@@ -50,7 +50,10 @@ public:
 public Q_SLOTS:
     void reset() override;
     void updateSettings() override;
-
+    void slotGamutMaskSet(KoGamutMask* gamutMask);
+    void slotGamutMaskUnset();
+    void slotGamutMaskPreviewUpdate();
+    void slotGamutMaskToggle(bool state);
 
 Q_SIGNALS:
     void settingsButtonClicked();
@@ -73,6 +76,7 @@ private:
     KisColorSelectorSimple* m_square;
     KisColorSelectorWheel* m_wheel;
     QPushButton* m_button;
+    QPushButton* m_gamutMaskButton;
     KisColorSelectorComponent* m_mainComponent;
     KisColorSelectorComponent* m_subComponent;
     KisColorSelectorComponent* m_grabbingComponent;

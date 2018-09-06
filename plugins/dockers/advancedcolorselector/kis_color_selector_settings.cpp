@@ -249,6 +249,9 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("lumaB", ui->l_lumaB->value());
     cfg.writeEntry("gamma", ui->SP_Gamma->value());
 
+    //gamut masking//
+    cfg.writeEntry("showMaskPreview", ui->showMaskPreview->isChecked());
+
     //slider//
     hsxcfg.writeEntry("hsvH", ui->csl_hsvH->isChecked());
     hsxcfg.writeEntry("hsvS", ui->csl_hsvS->isChecked());
@@ -492,6 +495,9 @@ void KisColorSelectorSettings::loadPreferences()
     ui->l_lumaB->setValue(cfg.readEntry("lumaB", 0.0722));
     ui->SP_Gamma->setValue(cfg.readEntry("gamma", 2.2));
 
+    //gamut masking//
+    ui->showMaskPreview->setChecked(cfg.readEntry("showMaskPreview", true));
+
     //color sliders//
     ui->csl_hsvH->setChecked(hsxcfg.readEntry("hsvH", false));
     ui->csl_hsvS->setChecked(hsxcfg.readEntry("hsvS", false));
@@ -583,6 +589,9 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->l_lumaG->setValue(0.7152);
     ui->l_lumaB->setValue(0.0722);
     ui->SP_Gamma->setValue(2.2);
+
+    //gamut masking//
+    ui->showMaskPreview->setChecked(true);
 
     //color sliders//
     ui->csl_hsvH->setChecked(false);
