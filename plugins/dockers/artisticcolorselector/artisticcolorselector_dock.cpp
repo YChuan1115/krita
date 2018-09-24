@@ -47,6 +47,7 @@
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_arcs_constants.h>
+#include <KisGamutMaskToolbar.h>
 
 #include "ui_wdgArtisticColorSelector.h"
 #include "ui_wdgARCSSettings.h"
@@ -91,8 +92,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     QPixmap valueScaleStepsPixmap = KisIconUtils::loadIcon("wheel-light").pixmap(16,16);
     QIcon infinityIcon = KisIconUtils::loadIcon("infinity");
     m_infinityPixmap = infinityIcon.pixmap(16,16);
-    m_iconMaskOff = KisIconUtils::loadIcon("gamut-mask-off");
-    m_iconMaskOn = KisIconUtils::loadIcon("gamut-mask-on");
 
     m_selectorUI->colorSelector->loadSettings();
 
@@ -101,9 +100,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
 
     m_selectorUI->bnDockerPrefs->setPopupWidget(m_preferencesUI);
     m_selectorUI->bnDockerPrefs->setIcon(KisIconUtils::loadIcon("configure"));
-
-    m_selectorUI->bnToggleMask->setChecked(false);
-    m_selectorUI->bnToggleMask->setIcon(m_iconMaskOff);
 
     //preferences
     m_hsxButtons->addButton(m_preferencesUI->bnHsy, KisColor::HSY);
@@ -209,7 +205,7 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(const KisColor&))     , SLOT(slotBgColorChanged(const KisColor&)));
 
     // gamut mask connections
-    connect(m_selectorUI->bnToggleMask          , SIGNAL(toggled(bool))                          , SLOT(slotGamutMaskToggle(bool)));
+    connect(m_selectorUI->gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), SLOT(slotGamutMaskToggle(bool)));
 
     connect(m_hsxButtons                        , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected(int)));
 
@@ -240,6 +236,8 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
         connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
                 this, SLOT(slotGamutMaskPreviewUpdate()));
     }
+
+    m_selectorUI->gamutMaskToolbar->connectMaskSignals(m_resourceProvider);
 }
 
 void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant& value)
@@ -402,13 +400,8 @@ void ArtisticColorSelectorDock::slotGamutMaskToggle(bool checked)
 {
     bool b = (!m_selectedMask) ? false : checked;
 
-    m_selectorUI->bnToggleMask->setChecked(b);
-
     if (b == true) {
         m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
-        m_selectorUI->bnToggleMask->setIcon(m_iconMaskOn);
-    } else {
-        m_selectorUI->bnToggleMask->setIcon(m_iconMaskOff);
     }
 
     m_selectorUI->colorSelector->setGamutMaskOn(b);
@@ -447,11 +440,9 @@ void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMask *mask)
 
     if (m_selectedMask) {
         m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
-        m_selectorUI->labelMaskName->setText(m_selectedMask->title());
         slotGamutMaskToggle(true);
     } else {
         slotGamutMaskToggle(false);
-        m_selectorUI->labelMaskName->setText(i18n("Select a mask in \"Gamut Masks\" docker"));
     }
 }
 
@@ -464,7 +455,6 @@ void ArtisticColorSelectorDock::slotGamutMaskUnset()
     m_selectedMask = nullptr;
 
     slotGamutMaskToggle(false);
-    m_selectorUI->labelMaskName->setText(i18n("Select a mask in \"Gamut Masks\" docker"));
     m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
 }
 
