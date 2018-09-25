@@ -136,14 +136,6 @@ void KisColorSelector::setConfiguration(KisColorSelectorConfiguration conf)
     m_mainComponent->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
     m_subComponent->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
 
-    if (displaySettingsButton() && m_gamutMaskButton) {
-        if (m_configuration.mainType == KisColorSelectorConfiguration::Wheel) {
-            m_gamutMaskButton->show();
-        } else {
-            m_gamutMaskButton->hide();
-        }
-    }
-
     QResizeEvent event(QSize(width(), height()), QSize());
     resizeEvent(&event);
 }
@@ -188,14 +180,6 @@ void KisColorSelector::slotGamutMaskPreviewUpdate()
 
 void KisColorSelector::slotGamutMaskToggle(bool state)
 {
-    if (state) {
-        m_gamutMaskButton->setIcon(KisIconUtils::loadIcon("gamut-mask-on"));
-        m_gamutMaskButton->setChecked(true);
-    } else {
-        m_gamutMaskButton->setIcon(KisIconUtils::loadIcon("gamut-mask-off"));
-        m_gamutMaskButton->setChecked(false);
-    }
-
     m_mainComponent->toggleGamutMask(state);
     m_subComponent->toggleGamutMask(state);
 }
@@ -285,8 +269,6 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
             if(displaySettingsButton()) {
                 int size = iconSize(width(), height()*0.9);
                 m_button->setGeometry(0, height()*0.1, size, size);
-                m_gamutMaskButton->setGeometry(width()-size, height()*0.1, size, size);
-                m_gamutMaskButton->show();
             }
             m_mainComponent->setGeometry(0, height()*0.1, width(), height()*0.9);
             m_subComponent->setGeometry( 0, 0,            width(), height()*0.1);
@@ -405,13 +387,6 @@ void KisColorSelector::init()
         m_button->setIcon(KisIconUtils::loadIcon("configure"));
         m_button->setFlat(true);
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
-
-        m_gamutMaskButton = new QPushButton(this);
-        m_gamutMaskButton->setIcon(KisIconUtils::loadIcon("gamut-mask-off"));
-        m_gamutMaskButton->setFlat(true);
-        m_gamutMaskButton->setCheckable(true);
-        m_gamutMaskButton->hide();
-        connect(m_gamutMaskButton, SIGNAL(toggled(bool)), this, SLOT(slotGamutMaskToggle(bool)));
     }
 
     // a tablet can send many more signals, than a mouse

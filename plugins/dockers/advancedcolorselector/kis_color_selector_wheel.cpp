@@ -273,14 +273,6 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
 {
     KoColor color(Qt::transparent, m_parent->colorSpace());
 
-    // dbg only, delete later
-//    if (m_gamutMaskOn && m_currentGamutMask) {
-//        bool isClear = coordIsClear(x,y);
-//        if (!isClear) {
-//            return KoColor(Qt::gray, m_parent->colorSpace());
-//        }
-//    }
-
     Q_ASSERT(x>=0 && x<=width());
     Q_ASSERT(y>=0 && y<=height());
 

@@ -76,7 +76,6 @@ private:
     KisColorSelectorSimple* m_square;
     KisColorSelectorWheel* m_wheel;
     QPushButton* m_button;
-    QPushButton* m_gamutMaskButton;
     KisColorSelectorComponent* m_mainComponent;
     KisColorSelectorComponent* m_subComponent;
     KisColorSelectorComponent* m_grabbingComponent;
